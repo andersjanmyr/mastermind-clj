@@ -1,7 +1,7 @@
 
 (ns mastermind-clj.core
   (:gen-class)
-  (:use [clojure.string :only (replace-first)]))
+  (:require [clojure.string :refer (replace-first)]))
 
 (defn count-correct
   "Counts the number of correct inputs"

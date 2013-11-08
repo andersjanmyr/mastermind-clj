@@ -1,5 +1,6 @@
 (ns mastermind-clj.core-test
-  (:require [clojure.test :refer :all]
+  (:require [midje.sweet :refer :all]
+            [clojure.test :refer :all]
             [mastermind-clj.core :refer :all]))
 
 (deftest test-count-correct

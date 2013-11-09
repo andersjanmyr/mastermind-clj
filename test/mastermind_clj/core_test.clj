@@ -3,33 +3,21 @@
             [clojure.test :refer :all]
             [mastermind-clj.core :refer :all]))
 
-(deftest test-count-correct
-  (testing "all correct"
-    (let [solution "1234"
-          entry "1234"]
-         (is (= (count-correct solution entry) 4))))
-  (testing "one correct"
-    (let [solution "1234"
-          entry "1111"]
-         (is (= (count-correct solution entry) 1)))))
+(facts "about array-to-map"
+  (fact "converts to map"
+    (array-to-map [:blue :green]) => { :one :blue :two :green }))
 
-(deftest test-count-wrongplace
-  (testing "one wrongplace"
-    (let [solution "1234"
-          entry "5551"]
-         (is (= (count-wrongplace solution entry) 1))))
-  (testing "one wrongplace one correct"
-    (let [solution "1134"
-          entry "1551"]
-         (is (= (count-wrongplace solution entry) 2))))
-  (testing "two wrongplace one correct"
-    (let [solution "3114"
-          entry "1551"]
-         (is (= (count-wrongplace solution entry) 2)))))
-
-(deftest test-count-correct-wrongplace
-  (testing "one correct one wrong"
-    (let [solution "1134"
-          entry "1551"]
-         (is (= (count-correct-wrongplace solution entry) [1 1])))))
+(facts "about score"
+  (fact "1 correct, 2 wrong place"
+    (let [solution [:red :yellow :white :blue]
+          entry [:white :black :yellow :blue]]
+      (score solution entry) => (exactly {:black 1 :white 2})))
+  (fact "4 correct"
+    (let [solution [:red :yellow :white :blue]
+          entry [:red :yellow :white :blue]]
+      (score solution entry) => (exactly {:black 4 :white 0})))
+  (fact "4 correct"
+    (let [solution [:red :yellow :white :white]
+          entry [:white :white :white :blue]]
+      (score solution entry) => (exactly {:black 1 :white 1}))))
 

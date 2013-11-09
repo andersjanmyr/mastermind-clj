@@ -1,23 +1,19 @@
 
 (ns mastermind-clj.core
   (:gen-class)
-  (:require [clojure.string :refer (replace-first)]))
+  (:require [clojure.data :refer [diff]]
+             [clojure.set :refer [intersection]]))
 
-(defn count-correct
-  "Counts the number of correct inputs"
-  [solution entry]
-  (count (filter identity (map = solution entry))))
+(defn array-to-map [arr]
+  (let [pairs (map vector [:one :two :three :four]  arr)]
+    (into {} pairs)))
 
-(defn count-wrongplace
-  "Counts the number of inputs in the wrong place"
-  [solution entry]
-  (let [ xs (reduce (fn [seed c] (replace-first seed c "X")) entry solution)]
-    (count (filter (fn [x] (= x \X)) xs))) )
-
-(defn count-correct-wrongplace [solution entry]
-  (let [correct (count-correct solution entry)
-        wrong (count-wrongplace solution entry)]
-    [correct (- wrong correct)]))
+(defn score [solution entry]
+  (let [[a b both] (diff (array-to-map solution) (array-to-map entry))
+        a (-> a vals set)
+        b (-> b vals set)]
+    {:black (count both)
+     :white (count (intersection a b))}))
 
 (defn -main
   "I don't do a whole lot ... yet."

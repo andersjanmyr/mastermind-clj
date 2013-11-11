@@ -21,3 +21,8 @@
           entry [:white :white :white :blue]]
       (score solution entry) => (exactly {:black 1 :white 1}))))
 
+(facts "about random-row"
+  (fact "generates four symbols"
+    (let [row (random-row)]
+      (count row) => (exactly 4)
+      )))

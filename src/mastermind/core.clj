@@ -1,7 +1,8 @@
 
-(ns mastermind-clj.core
+(ns mastermind.core
   (:gen-class)
   (:require [clojure.data :refer [diff]]
+             [clojure.core.logic :refer :all]
              [clojure.set :refer [intersection]]))
 
 (def symbols [:black :white :red :yellow :blue :green])
@@ -18,7 +19,16 @@
      :white (count (intersection a b))}))
 
 (defn random-row []
-    (map (fn [x] (symbols (rand-int 6))) (range 0 4)))
+  (map (fn [x] (symbols (rand-int 6))) (range 0 4)))
+
+(defn rows
+  (runs* [q]
+    (fresh [a b c d]
+      (== q [a b c d])
+      (membero a symbols)
+      (membero b symbols)
+      (membero c symbols)
+      (membero d symbols))))
 
 (defn -main
   "I don't do a whole lot ... yet."

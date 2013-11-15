@@ -1,7 +1,8 @@
-(ns mastermind-clj.core-test
+(ns mastermind.core-test
   (:require [midje.sweet :refer :all]
             [clojure.test :refer :all]
-            [mastermind-clj.core :refer :all]))
+            [clojure.core.logic :refer [runs*]]))
+            [mastermind.core :refer :all]))
 
 (facts "about array-to-map"
   (fact "converts to map"
@@ -26,3 +27,6 @@
     (let [row (random-row)]
       (count row) => (exactly 4)
       )))
+
+(facts "about rows"
+  (fact "generates many rows"

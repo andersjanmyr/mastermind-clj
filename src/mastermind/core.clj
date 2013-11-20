@@ -21,8 +21,8 @@
 (defn random-row []
   (map (fn [x] (symbols (rand-int 6))) (range 0 4)))
 
-(defn rows
-  (runs* [q]
+(defn rows []
+  (run* [q]
     (fresh [a b c d]
       (== q [a b c d])
       (membero a symbols)

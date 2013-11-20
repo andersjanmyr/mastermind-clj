@@ -29,4 +29,4 @@
       )))
 
 (facts "about rows"
-  (fact "generates many rows"
+  (fact "generates many rows"))

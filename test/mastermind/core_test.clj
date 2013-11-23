@@ -63,8 +63,16 @@
       (count results) => 9))
   (fact "white nil nil white"
     (let [results
-          (constraints [ { :row [:green :blue :black :white]
-                           :score [:white nil nil :white]}] )]
-      results => [:red :green :blue :yellow]
-      (count results) => 192)))
+          (constraints [
+                        { :row [:red :green :blue :yellow]
+                           :score [:white nil nil :white]}
+                        { :row [:green :blue :black :white]
+                           :score [:white nil nil :white]}
+                        { :row [:blue :red :white :blue]
+                           :score [:white nil nil :white]}
+                        { :row [:white :yellow :red :black]
+                           :score [:white :white :white :black]}
+                        ] )]
+      results => '([:white :black :yellow :red])
+      (count results) => 1)))
 

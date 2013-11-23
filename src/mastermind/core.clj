@@ -101,12 +101,27 @@
         [(constraints-one vars row (vector-or-empty scores 10))]
         [(constraints-one vars row (vector-or-empty scores 11))])))
 
+
+(defn constraints-perm-maybe [vars v i]
+  (if (< i (count v))
+    (constraints-perm vars (v i))
+    (== 1 1)))
+
 (defn constraints [entries]
   (run* [q]
     (fresh [a b c d]
       (== q [a b c d])
       (rows [a b c d])
-      (constraints-perm [a b c d] (entries 0) ))))
+      (constraints-perm-maybe [a b c d] entries 0)
+      (constraints-perm-maybe [a b c d] entries 1)
+      (constraints-perm-maybe [a b c d] entries 2)
+      (constraints-perm-maybe [a b c d] entries 3)
+      (constraints-perm-maybe [a b c d] entries 4)
+      (constraints-perm-maybe [a b c d] entries 5)
+      (constraints-perm-maybe [a b c d] entries 6)
+      (constraints-perm-maybe [a b c d] entries 7)
+      (constraints-perm-maybe [a b c d] entries 8)
+      (constraints-perm-maybe [a b c d] entries 9))))
 
 
 

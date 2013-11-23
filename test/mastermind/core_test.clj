@@ -76,9 +76,15 @@
                        [:black :black :black :black])]
       (first results) => [:red :blue :green :yellow]
       (count results) => 1))
+  (fact "white white white white"
+    (let [results
+          (constraints [:red :blue :green :yellow]
+                       [:white :white :white :white])]
+      (first results) => [:yellow :red :blue :green]
+      (count results) => 9))
   (fact "black nil nil nil"
     (let [results
           (constraints [:red :blue :green :yellow] [:black nil nil nil])]
       results => []
-      (count results) => 27)))
+      (count results) => 104)))
 

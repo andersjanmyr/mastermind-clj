@@ -72,19 +72,20 @@
 (facts "about constraints"
   (fact "black black black black"
     (let [results
-          (constraints [:red :blue :green :yellow]
-                       [:black :black :black :black])]
+          (constraints [ { :row [:red :blue :green :yellow]
+                           :score [:black :black :black :black] }])]
       (first results) => [:red :blue :green :yellow]
       (count results) => 1))
   (fact "white white white white"
     (let [results
-          (constraints [:red :blue :green :yellow]
-                       [:white :white :white :white])]
+          (constraints [ { :row [:red :blue :green :yellow]
+                           :score [:white :white :white :white] }])]
       (first results) => [:yellow :red :blue :green]
       (count results) => 9))
-  (fact "black nil nil nil"
+  (fact "white nil nil white"
     (let [results
-          (constraints [:red :blue :green :yellow] [:black nil nil nil])]
-      results => []
-      (count results) => 104)))
+          (constraints [ { :row [:green :blue :black :white]
+                           :score [:white nil nil :white]}] )]
+      results => [:red :green :blue :yellow]
+      (count results) => 192)))
 

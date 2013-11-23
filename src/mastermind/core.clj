@@ -57,7 +57,8 @@
   (case (score pos)
     nil (nil-constraint vars row pos)
     :black (black-constraint vars row pos)
-    :white (white-constraint vars row pos)))
+    :white (white-constraint vars row pos)
+    :nada (== 1 2)))
 
 (defn rows [vars]
   (conde
@@ -76,13 +77,36 @@
 (defn combos [list]
   (vec (permutations list)))
 
-(defn constraints [row score]
+(defn vector-or-empty [v i]
+  (if (< i (count v))
+    (vec (v i))
+    [:nada :nada :nada :nada]))
+
+(defn constraints-perm [vars entry]
+  (let
+    [row (:row entry)
+     score (:score entry)
+     scores (combos score)]
+      (conde
+        [(constraints-one vars row (vector-or-empty scores 0))]
+        [(constraints-one vars row (vector-or-empty scores 1))]
+        [(constraints-one vars row (vector-or-empty scores 2))]
+        [(constraints-one vars row (vector-or-empty scores 3))]
+        [(constraints-one vars row (vector-or-empty scores 4))]
+        [(constraints-one vars row (vector-or-empty scores 5))]
+        [(constraints-one vars row (vector-or-empty scores 6))]
+        [(constraints-one vars row (vector-or-empty scores 7))]
+        [(constraints-one vars row (vector-or-empty scores 8))]
+        [(constraints-one vars row (vector-or-empty scores 9))]
+        [(constraints-one vars row (vector-or-empty scores 10))]
+        [(constraints-one vars row (vector-or-empty scores 11))])))
+
+(defn constraints [entries]
   (run* [q]
     (fresh [a b c d]
       (== q [a b c d])
       (rows [a b c d])
-      (let [scores (combos score)]
-          (constraints-one [a b c d] row (vec score))))))
+      (constraints-perm [a b c d] (entries 0) ))))
 
 
 

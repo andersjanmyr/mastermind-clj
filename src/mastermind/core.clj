@@ -22,15 +22,6 @@
 (defn random-row []
   (map (fn [x] (symbols (rand-int 6))) (range 0 4)))
 
-(defn rows []
-  (run* [q]
-    (fresh [a b c d]
-      (== q [a b c d])
-      (membero a symbols)
-      (membero b symbols)
-      (membero c symbols)
-      (membero d symbols))))
-
 (defn without [v pos]
   (vec (concat (subvec v 0 pos) (subvec v (+ pos 1)))))
 
@@ -61,23 +52,55 @@
 (defn possible-values [row score]
   (map row score))
 
-(defn nil-constraint [q row pos]
-  (membero q (without-list symbols (without row pos))))
+(defn rows [vars]
+  (membero (vars 0) symbols)
+  (membero (vars 1) symbols)
+  (membero (vars 2) symbols)
+  (membero (vars 3) symbols))
 
-(defn black-constraint [q row pos]
-  (== q (row pos)))
+(defn nil-constraint [vars row pos]
+  (let [val (row pos)]
+    (!= (vars 1) val)
+    (!= (vars 1) val)
+    (!= (vars 2) val)
+    (!= (vars 3) val)))
 
-(defn white-constraint [q row pos]
-  (membero q (without-list symbols (without row pos))))
+(defn black-constraint [vars row pos]
+    (== (vars pos) (row pos)))
+
+
+(def cols [0 1 2 3])
+
+(defn white-constraint [vars row pos]
+  (let [val (row pos)]
+    (!= (vars pos) val)
+    (conde
+      [(== (vars (mod (+ pos 1) 4)) val)]
+      [(== (vars (mod (+ pos 2) 4)) val)]
+      [(== (vars (mod (+ pos 3) 4)) val)])))
+
+(defn constraint [vars row score pos]
+  (case (score pos)
+    nil (nil-constraint vars row pos)
+    :black (white-constraint vars row pos)
+    :white (white-constraint vars row pos)))
 
 (defn constraints [row score]
   (run* [q]
     (fresh [a b c d]
+        (== q [a b c d])
+        (rows [a b c d])
+        (constraint [a b c d] row score 0)
+        (constraint [a b c d] row score 1)
+        (constraint [a b c d] row score 2)
+        (constraint [a b c d] row score 3))))
+
+(defn constraints-multi [pairs]
+  (run* [q]
+    (fresh [a b c d]
       (== q [a b c d])
-      (black-constraint a row 0)
-      (white-constraint b row 1)
-      (white-constraint c row 2)
-      (nil-constraint d row 3))))
+      (apply constraints (pairs 2)))))
+
 
 
 (defn white [row n]

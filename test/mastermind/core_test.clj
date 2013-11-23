@@ -1,7 +1,7 @@
 (ns mastermind.core-test
+  (:refer-clojure :exclude [==])
   (:require [midje.sweet :refer :all]
-            [clojure.test :refer :all]
-            [clojure.core.logic :refer [run*]]
+            [clojure.core.logic :refer [run* fresh]]
             [mastermind.core :refer :all]))
 
 (facts "about array-to-map"
@@ -28,9 +28,6 @@
       (count row) => (exactly 4)
       )))
 
-(facts "about rows"
-  (fact "1296 rows")
-    (count (rows)) => (exactly 1296))
 
 (facts "about without"
   (fact ""
@@ -58,12 +55,22 @@
   (fact "two white and one black"
     (count (combos [:black :white :white nil])) => 12))
 
-(facts "about constraints"
-  (fact "black white white nil"
-    (let [results
-          (constraints [:red :blue :white :yellow] [:black :white :white nil])]
-      (first results) => [:red :black :black :black])))
-
 (facts "about possible-values"
   (fact "two white and one black"
     (count (combos [:black :white :white nil])) => 12))
+
+(facts "about rows"
+  (fact "1296 rows")
+    (let [result
+          (run* [q]
+            (fresh [a b c d]
+              (let [vars [a b c d]]
+                (rows vars))))]
+      (count (result)) => (exactly 1296)))
+
+(facts "about constraints"
+  (fact "black white white nil"
+    (let [results
+          (constraints [:red :blue :green :yellow] [:black :white :white nil])]
+      results => [])))
+

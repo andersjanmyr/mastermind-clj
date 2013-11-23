@@ -29,27 +29,6 @@
       )))
 
 
-(facts "about without"
-  (fact ""
-    (without [1 2 3 4] 1) => [1 3 4])
-  (fact ""
-    (without [1 2 3 4] 0) => [2 3 4]))
-
-(facts "about without-list"
-  (fact ""
-    (without-list [1 2 3 4] [2 1]) => [3 4])
-  (fact ""
-    (without-list [1 2 3 4] [2 3]) => [1 4]))
-
-(facts "about black"
-  (fact "first"
-    (first (black [:red :blue :white :yellow] 1)) => [:red :black :black :black])
-  (fact "count"
-    (count (black [:red :blue :white :yellow] 1)) => 108))
-
-(facts "about white"
-  (fact "first"
-    (white [:red :blue :white :yellow] 1) => 3))
 
 (facts "about combos"
   (fact "two white and one black"

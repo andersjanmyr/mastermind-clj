@@ -30,30 +30,6 @@
   (let [[res _ _] (diff (set v) (set list))]
     (vec res)))
 
-(defn black-in-pos [q row pos]
-  (fresh [a b c]
-    (== q [(row pos) a b c])
-    (membero a (without-list symbols (without row pos)))
-    (membero b (without-list symbols (without row pos)))
-    (membero c (without-list symbols (without row pos)))))
-
-(defn black [row n]
-  (run* [q]
-    (conde
-      [(black-in-pos q row 0)]
-      [(black-in-pos q row 1)]
-      [(black-in-pos q row 2)]
-      [(black-in-pos q row 3)])))
-
-(defn combos [list]
-  (permutations list))
-
-(defn possible-value [value ])
-
-(defn possible-values [row score]
-  (map row score))
-
-
 (defn nil-constraint [vars row pos]
   (let [val (row pos)]
     (conde
@@ -70,16 +46,17 @@
 
 (defn white-constraint [vars row pos]
   (let [val (row pos)]
-    (!= (vars pos) val)
     (conde
-      [(== (vars (mod (+ pos 1) 4)) val)]
-      [(== (vars (mod (+ pos 2) 4)) val)]
-      [(== (vars (mod (+ pos 3) 4)) val)])))
+      [(!= (vars pos) val)
+       (conde
+         [(== (vars (mod (+ pos 1) 4)) val)]
+         [(== (vars (mod (+ pos 2) 4)) val)]
+         [(== (vars (mod (+ pos 3) 4)) val)])])))
 
 (defn constraint [vars row score pos]
   (case (score pos)
     nil (nil-constraint vars row pos)
-    :black (white-constraint vars row pos)
+    :black (black-constraint vars row pos)
     :white (white-constraint vars row pos)))
 
 (defn rows [vars]
@@ -103,10 +80,9 @@
   (run* [q]
     (fresh [a b c d]
       (== q [a b c d])
-      (distinct [a b c d])
       (rows [a b c d])
       (let [scores (combos score)]
-        (constraints-one [a b c d] row (vec (scores 0)))))))
+          (constraints-one [a b c d] row (vec score))))))
 
 
 

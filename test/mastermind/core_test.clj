@@ -17,7 +17,7 @@
     (let [solution [:red :yellow :white :blue]
           entry [:red :yellow :white :blue]]
       (score solution entry) => (exactly {:black 4 :white 0})))
-  (fact "4 correct"
+  (fact "1 black 1 white correct"
     (let [solution [:red :yellow :white :white]
           entry [:white :white :white :blue]]
       (score solution entry) => (exactly {:black 1 :white 1}))))
@@ -70,9 +70,15 @@
       (count result) => (exactly 1296)))
 
 (facts "about constraints"
+  (fact "black black black black"
+    (let [results
+          (constraints [:red :blue :green :yellow]
+                       [:black :black :black :black])]
+      (first results) => [:red :blue :green :yellow]
+      (count results) => 1))
   (fact "black nil nil nil"
     (let [results
           (constraints [:red :blue :green :yellow] [:black nil nil nil])]
       results => []
-      (count results) => 81)))
+      (count results) => 27)))
 

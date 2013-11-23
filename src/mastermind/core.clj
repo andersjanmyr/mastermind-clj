@@ -1,8 +1,9 @@
 
 (ns mastermind.core
-  (:refer-clojure :exclude [==])
+  (:refer-clojure :exclude [== distinct])
   (:require [clojure.data :refer [diff]]
             [clojure.core.logic :refer :all]
+            [clojure.core.logic.fd :refer [distinct]]
             [clojure.math.combinatorics :refer [permutations]]
             [clojure.set :refer [intersection]]))
 
@@ -52,18 +53,14 @@
 (defn possible-values [row score]
   (map row score))
 
-(defn rows [vars]
-  (membero (vars 0) symbols)
-  (membero (vars 1) symbols)
-  (membero (vars 2) symbols)
-  (membero (vars 3) symbols))
 
 (defn nil-constraint [vars row pos]
   (let [val (row pos)]
-    (!= (vars 1) val)
-    (!= (vars 1) val)
-    (!= (vars 2) val)
-    (!= (vars 3) val)))
+    (conde
+      [(!= (vars 0) val)
+        (!= (vars 1) val)
+        (!= (vars 2) val)
+        (!= (vars 3) val)])))
 
 (defn black-constraint [vars row pos]
     (== (vars pos) (row pos)))
@@ -85,21 +82,31 @@
     :black (white-constraint vars row pos)
     :white (white-constraint vars row pos)))
 
+(defn rows [vars]
+  (conde
+    [(membero (vars 0) symbols)
+    (membero (vars 1) symbols)
+    (membero (vars 2) symbols)
+    (membero (vars 3) symbols)]))
+
+(defn constraints-one [vars row score]
+  (conde
+    [(constraint vars row score 0)
+      (constraint vars row score 1)
+      (constraint vars row score 2)
+      (constraint vars row score 3)]))
+
+(defn combos [list]
+  (vec (permutations list)))
+
 (defn constraints [row score]
   (run* [q]
     (fresh [a b c d]
-        (== q [a b c d])
-        (rows [a b c d])
-        (constraint [a b c d] row score 0)
-        (constraint [a b c d] row score 1)
-        (constraint [a b c d] row score 2)
-        (constraint [a b c d] row score 3))))
-
-(defn constraints-multi [pairs]
-  (run* [q]
-    (fresh [a b c d]
       (== q [a b c d])
-      (apply constraints (pairs 2)))))
+      (distinct [a b c d])
+      (rows [a b c d])
+      (let [scores (combos score)]
+        (constraints-one [a b c d] row (vec (scores 0)))))))
 
 
 

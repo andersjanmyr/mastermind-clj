@@ -53,7 +53,9 @@
 
 (facts "about combos"
   (fact "two white and one black"
-    (count (combos [:black :white :white nil])) => 12))
+    (count (combos [:black :white :white nil])) => 12)
+  (fact "vector"
+    ((combos [:black :white :white nil]) 1) => [:black :white nil :white]))
 
 (facts "about possible-values"
   (fact "two white and one black"
@@ -64,13 +66,13 @@
     (let [result
           (run* [q]
             (fresh [a b c d]
-              (let [vars [a b c d]]
-                (rows vars))))]
-      (count (result)) => (exactly 1296)))
+              (rows [a b c d])))]
+      (count result) => (exactly 1296)))
 
 (facts "about constraints"
-  (fact "black white white nil"
+  (fact "black nil nil nil"
     (let [results
-          (constraints [:red :blue :green :yellow] [:black :white :white nil])]
-      results => [])))
+          (constraints [:red :blue :green :yellow] [:black nil nil nil])]
+      results => []
+      (count results) => 81)))
 

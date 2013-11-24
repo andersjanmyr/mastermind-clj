@@ -83,7 +83,7 @@
 (defn vector-or-empty [v i]
   (if (< i (count v))
     (vec (v i))
-    [:nada :nada :nada :nada]))
+    [:nada :nada :nada :nada])) ;TODO get rid of this hack
 
 (defn constraints-perm [vars entry]
   (let
@@ -91,6 +91,7 @@
      score (:score entry)
      scores (combos score)]
       (conde
+        ; TODO Replace this with recursion
         [(constraints-one vars row (vector-or-empty scores 0))]
         [(constraints-one vars row (vector-or-empty scores 1))]
         [(constraints-one vars row (vector-or-empty scores 2))]
@@ -115,6 +116,7 @@
     (fresh [a b c d]
       (== q [a b c d])
       (rows [a b c d])
+      ; TODO Replace this with recursion
       (constraints-perm-maybe [a b c d] entries 0)
       (constraints-perm-maybe [a b c d] entries 1)
       (constraints-perm-maybe [a b c d] entries 2)

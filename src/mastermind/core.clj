@@ -31,7 +31,7 @@
                        :white (intersection a b)})))
 
 (defn random-row []
-  (map (fn [x] (symbols (rand-int 6))) (range 0 4)))
+  (vec (map (fn [x] (symbols (rand-int 6))) (range 0 4))))
 
 (defn without [v pos]
   (vec (concat (subvec v 0 pos) (subvec v (+ pos 1)))))
@@ -137,8 +137,17 @@
 (defn guess [entries]
   (rand-nth (constraints entries)))
 
+
 (defn solve [solution]
-  (let [guess (random-row)]))
+  (let [first-guess (random-row)]
+    (loop [g first-guess
+           entries []]
+      (let [s (score solution g)
+             next-entries (conj entries {:row g :score s})
+             ]
+        (if (= s [:black :black :black :black])
+          next-entries
+          (recur (guess next-entries) next-entries))))))
 
 
 (defn -main

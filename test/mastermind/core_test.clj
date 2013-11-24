@@ -103,20 +103,10 @@
       (count results) => 1)))
 
 
-(facts "about guess"
-  (fact "another game"
-    (let [results
-          (guess [
-                        { :row [:red :green :blue :yellow]
-                           :score [nil nil nil nil]}
-                        { :row [:black :white :black :white]
-                           :score [:white :white :black :black]}
-                        ] )]
-      results => [:white :black :black :white])))
-
 (facts "about solve"
   (fact "another game"
     (let [solution [:red :green :red :blue]
           result (solve solution)]
-      result => solution)))
+      (print result)
+      (:row (last result)) => solution)))
 

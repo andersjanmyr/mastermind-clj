@@ -10,10 +10,12 @@
 (def symbols [:black :white :red :yellow :blue :green])
 
 (defn array-to-map [arr]
+  "Converts a 4 element array to a map with the keys :one :two :three :four"
   (let [pairs (map vector [:one :two :three :four]  arr)]
     (into {} pairs)))
 
 (defn score-map-to-vec [score-map]
+  "Converts map {:white list :black list} to [:black :white nil nil]"
   (let [whites (map (fn [_] :white ) (:white score-map))
         blacks (map (fn [_] :black ) (:black score-map))
         nils (repeat
@@ -24,6 +26,7 @@
 
 
 (defn score [solution entry]
+  "Calculates the score of of an entry [:red :white :yellow :blue]"
   (let [[a b both] (diff (array-to-map solution) (array-to-map entry))
         a (-> a vals set)
         b (-> b vals set)]
@@ -31,9 +34,11 @@
                        :white (intersection a b)})))
 
 (defn random-row []
+  "Creates a random row [:red :white :yellow :blue]"
   (vec (map (fn [x] (symbols (rand-int 6))) (range 0 4))))
 
 (defn nil-constraint [vars row pos]
+  "Constraint for a missing mark"
   (let [val (row pos)]
     (conde
       [(!= (vars 0) val)
@@ -42,12 +47,14 @@
         (!= (vars 3) val)])))
 
 (defn black-constraint [vars row pos]
-    (== (vars pos) (row pos)))
+  "Constraint for a black mark"
+  (== (vars pos) (row pos)))
 
 
 (def cols [0 1 2 3])
 
 (defn white-constraint [vars row pos]
+  "Constraint for a white mark"
   (let [val (row pos)]
     (conde
       [(!= (vars pos) val)
@@ -57,11 +64,12 @@
          [(== (vars (mod (+ pos 3) 4)) val)])])))
 
 (defn constraint [vars row score pos]
+  "Constraint for nil :white or :black"
   (case (score pos)
     nil (nil-constraint vars row pos)
     :black (black-constraint vars row pos)
     :white (white-constraint vars row pos)
-    :nada (== 1 2)))
+    :nada (== 1 2))) ; TODO :nada needs to be removed
 
 (defn rows [vars]
   (conde
@@ -80,7 +88,9 @@
 (defn combos [list]
   (vec (permutations list)))
 
+; TODO this should not be needed
 (defn vector-or-empty [v i]
+  "Return a dummy vector since I cannot recur over the scores"
   (if (< i (count v))
     (vec (v i))
     [:nada :nada :nada :nada])) ;TODO get rid of this hack
@@ -106,12 +116,15 @@
         [(constraints-one vars row (vector-or-empty scores 11))])))
 
 
+; TODO this should not be needed
+  "Return a dummy constraint since I cannot recur over the permutations"
 (defn constraints-perm-maybe [vars v i]
   (if (< i (count v))
     (constraints-perm vars (v i))
     (== 1 1)))
 
 (defn constraints [entries]
+  "Create constraints for all permutations"
   (run* [q]
     (fresh [a b c d]
       (== q [a b c d])
@@ -130,9 +143,11 @@
 
 
 (defn guess [entries]
+  "Create a random guess based on constraints"
   (rand-nth (constraints entries)))
 
 (defn solve [solution]
+  "Solve the solution by recurring guesses and scoring"
   (let [first-guess (random-row)]
     (loop [g first-guess
            entries []]
@@ -144,6 +159,6 @@
 
 
 (defn -main
-  "I don't do a whole lot ... yet."
+  "Solve the solution"
   [& args]
-  (println "Hello, World!"))
+  (solve (first args))

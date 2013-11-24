@@ -12,15 +12,15 @@
   (fact "1 correct, 2 wrong place"
     (let [solution [:red :yellow :white :blue]
           entry [:white :black :yellow :blue]]
-      (score solution entry) => (exactly {:black 1 :white 2})))
+      (score solution entry) => [:black :white :white nil]))
   (fact "4 correct"
     (let [solution [:red :yellow :white :blue]
           entry [:red :yellow :white :blue]]
-      (score solution entry) => (exactly {:black 4 :white 0})))
+      (score solution entry) => [:black :black :black :black]))
   (fact "1 black 1 white correct"
     (let [solution [:red :yellow :white :white]
           entry [:white :white :white :blue]]
-      (score solution entry) => (exactly {:black 1 :white 1}))))
+      (score solution entry) => [:black :white nil nil] )))
 
 (facts "about random-row"
   (fact "generates four symbols"
@@ -113,3 +113,10 @@
                            :score [:white :white :black :black]}
                         ] )]
       results => [:white :black :black :white])))
+
+(facts "about solve"
+  (fact "another game"
+    (let [solution [:red :green :red :blue]
+          result (solve solution)]
+      result => solution)))
+

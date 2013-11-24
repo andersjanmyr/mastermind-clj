@@ -13,12 +13,22 @@
   (let [pairs (map vector [:one :two :three :four]  arr)]
     (into {} pairs)))
 
+(defn score-map-to-vec [score-map]
+  (let [whites (map (fn [_] :white ) (:white score-map))
+        blacks (map (fn [_] :black ) (:black score-map))
+        nils (repeat
+               (- 4 (count (:black score-map))
+                  (count (:white score-map)))
+               nil)]
+    (vec (concat blacks whites nils))))
+
+
 (defn score [solution entry]
   (let [[a b both] (diff (array-to-map solution) (array-to-map entry))
         a (-> a vals set)
         b (-> b vals set)]
-    {:black (count both)
-     :white (count (intersection a b))}))
+    (score-map-to-vec {:black both
+                       :white (intersection a b)})))
 
 (defn random-row []
   (map (fn [x] (symbols (rand-int 6))) (range 0 4)))
@@ -127,8 +137,8 @@
 (defn guess [entries]
   (rand-nth (constraints entries)))
 
-(defn white [row n]
-  (+ 1 2))
+(defn solve [solution]
+  (let [guess (random-row)]))
 
 
 (defn -main

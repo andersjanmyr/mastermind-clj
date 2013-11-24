@@ -33,13 +33,6 @@
 (defn random-row []
   (vec (map (fn [x] (symbols (rand-int 6))) (range 0 4))))
 
-(defn without [v pos]
-  (vec (concat (subvec v 0 pos) (subvec v (+ pos 1)))))
-
-(defn without-list [v list]
-  (let [[res _ _] (diff (set v) (set list))]
-    (vec res)))
-
 (defn nil-constraint [vars row pos]
   (let [val (row pos)]
     (conde
@@ -137,14 +130,12 @@
 (defn guess [entries]
   (rand-nth (constraints entries)))
 
-
 (defn solve [solution]
   (let [first-guess (random-row)]
     (loop [g first-guess
            entries []]
       (let [s (score solution g)
-             next-entries (conj entries {:row g :score s})
-             ]
+            next-entries (conj entries {:row g :score s})]
         (if (= s [:black :black :black :black])
           next-entries
           (recur (guess next-entries) next-entries))))))

@@ -25,10 +25,7 @@
 (facts "about random-row"
   (fact "generates four symbols"
     (let [row (random-row)]
-      (count row) => (exactly 4)
-      )))
-
-
+      (count row) => (exactly 4))))
 
 (facts "about combos"
   (fact "two white and one black"
@@ -36,17 +33,46 @@
   (fact "vector"
     ((combos [:black :white :white nil]) 1) => [:black :white nil :white]))
 
-(facts "about possible-values"
-  (fact "two white and one black"
-    (count (combos [:black :white :white nil])) => 12))
-
 (facts "about rows"
   (fact "1296 rows")
     (let [result
           (run* [q]
             (fresh [a b c d]
               (rows [a b c d])))]
-      (count result) => (exactly 1296)))
+      (count result) => 1296))
+
+(facts "about nil-constraint"
+  (fact "625 rows")
+    (let [row [:red :green :blue :yellow]
+          result
+          (run* [q]
+            (fresh [a b c d]
+              (rows [ a b c d])
+              (nil-constraint [a b c d] row 0)
+                   ))]
+      (count result) => 625))
+
+(facts "about white-constraint"
+  (fact "540 rows")
+    (let [row [:red :green :blue :yellow]
+          result
+          (run* [q]
+            (fresh [a b c d]
+              (rows [ a b c d])
+              (white-constraint [a b c d] row 0)
+                   ))]
+      (count result) => 540))
+
+(facts "about black-constraint"
+  (fact " rows")
+    (let [row [:red :green :blue :yellow]
+          result
+          (run* [q]
+            (fresh [a b c d]
+              (rows [ a b c d])
+              (black-constraint [a b c d] row 0)
+                   ))]
+      (count result) => 216))
 
 (facts "about constraints"
   (fact "black black black black"
@@ -61,7 +87,7 @@
                            :score [:white :white :white :white] }])]
       (first results) => [:yellow :red :blue :green]
       (count results) => 9))
-  (fact "white nil nil white"
+  (fact "a whole game"
     (let [results
           (constraints [
                         { :row [:red :green :blue :yellow]
@@ -76,3 +102,14 @@
       results => '([:white :black :yellow :red])
       (count results) => 1)))
 
+
+(facts "about guess"
+  (fact "another game"
+    (let [results
+          (guess [
+                        { :row [:red :green :blue :yellow]
+                           :score [nil nil nil nil]}
+                        { :row [:black :white :black :white]
+                           :score [:white :white :black :black]}
+                        ] )]
+      results => [:white :black :black :white])))

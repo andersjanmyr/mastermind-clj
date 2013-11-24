@@ -124,6 +124,8 @@
       (constraints-perm-maybe [a b c d] entries 9))))
 
 
+(defn guess [entries]
+  (rand-nth (constraints entries)))
 
 (defn white [row n]
   (+ 1 2))

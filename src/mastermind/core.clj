@@ -146,16 +146,18 @@
   "Create a random guess based on constraints"
   (rand-nth (constraints entries)))
 
+(defn solve-recur [row solution entries]
+  (let [s (score solution row)
+        next-entries (conj entries {:row row :score s})]
+    (println (count entries))
+    (if (= s [:black :black :black :black])
+      next-entries
+      (recur (guess next-entries) solution next-entries))))
+
 (defn solve [solution]
   "Solve the solution by recurring guesses and scoring"
   (let [first-guess (random-row)]
-    (loop [g first-guess
-           entries []]
-      (let [s (score solution g)
-            next-entries (conj entries {:row g :score s})]
-        (if (= s [:black :black :black :black])
-          next-entries
-          (recur (guess next-entries) next-entries))))))
+    (solve-recur first-guess solution [])))
 
 
 (defn -main

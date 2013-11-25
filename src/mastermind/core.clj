@@ -161,4 +161,4 @@
 (defn -main
   "Solve the solution"
   [& args]
-  (solve (first args))
+  (solve (first args)))

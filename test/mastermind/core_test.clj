@@ -103,10 +103,10 @@
       (count results) => 1)))
 
 
-(facts "about solve"
-  (fact "another game"
-    (let [solution [:red :green :red :blue]
-          result (solve solution)]
-      (print result)
-      (:row (last result)) => solution)))
+;; (facts "about solve"
+;;   (fact "another game"
+;;     (let [solution [:red :green :red :blue]
+;;           result (solve solution)]
+;;       (print result)
+;;       (:row (last result)) => solution)))
 

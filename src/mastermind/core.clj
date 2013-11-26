@@ -16,12 +16,10 @@
 
 (defn score-map-to-vec [score-map]
   "Converts map {:white list :black list} to [:black :white nil nil]"
-  (let [whites (map (fn [_] :white ) (:white score-map))
-        blacks (map (fn [_] :black ) (:black score-map))
-        nils (repeat
-               (- 4 (count (:black score-map))
-                  (count (:white score-map)))
-               nil)]
+  (let [{bc :black wc :white} score-map
+        whites (repeat wc :white)
+        blacks (repeat bc :black)
+        nils (repeat (- 4 wc bc) nil)]
     (vec (concat blacks whites nils))))
 
 
@@ -30,8 +28,8 @@
   (let [[a b both] (diff (array-to-map solution) (array-to-map entry))
         a (-> a vals set)
         b (-> b vals set)]
-    (score-map-to-vec {:black both
-                       :white (intersection a b)})))
+    (score-map-to-vec {:black (count both)
+                       :white (count (intersection a b))})))
 
 (defn random-row []
   "Creates a random row [:red :white :yellow :blue]"

@@ -1,36 +1,29 @@
 # mastermind-clj
 
-FIXME: description
-
-## Installation
-
-Download from http://example.com/FIXME.
+A Mastermind solver using `clojure.core.logic`
 
 ## Usage
 
-FIXME: explanation
+```sh
+$ lein repl
+> (use 'mastermind.core)
 
-    $ java -jar mastermind-clj-0.1.0-standalone.jar [args]
+> (solve (random-row))
+[{:row [:black :red :white :red], :score [:black nil nil nil]} {:row [:black :green :blue :yellow], :score [:white nil nil nil]} {:row [:blue :white :white :blue], :score [:black :black :black :black]}]
 
-## Options
+> (solve [:red :green :blue :white])
+[{:row [:black :black :green :red], :score [:white :white nil nil]} {:row [:blue :white :yellow :black], :score [:white :white nil nil]} {:row [:red :blue :white :green], :score [:black :white :white :white]} {:row [:red :green :blue :white], :score [:black :black :black :black]}]
+```
 
-FIXME: listing of options this app accepts.
 
-## Examples
 
-...
 
 ### Bugs
 
-...
+Very often the `(solve)` crashes with the following output.
 
-### Any Other Sections
-### That You Think
-### Might be Useful
+```sh
+> (solve (random-row))
+IndexOutOfBoundsException   clojure.lang.RT.nthFrom (RT.java:795)
+```
 
-## License
-
-Copyright © 2013 FIXME
-
-Distributed under the Eclipse Public License either version 1.0 or (at
-your option) any later version.

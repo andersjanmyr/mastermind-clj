@@ -35,14 +35,14 @@
   "Creates a random row [:red :white :yellow :blue]"
   (vec (map (fn [x] (symbols (rand-int 6))) (range 0 4))))
 
-(defn nil-constraint [vars row pos]
+(defn nil-constraint [[a b c d] row pos]
   "Constraint for a missing mark"
   (let [val (row pos)]
     (conde
-      [(!= (vars 0) val)
-        (!= (vars 1) val)
-        (!= (vars 2) val)
-        (!= (vars 3) val)])))
+      [(!= a val)
+       (!= b val)
+       (!= c val)
+       (!= d val)])))
 
 (defn black-constraint [vars row pos]
   "Constraint for a black mark"

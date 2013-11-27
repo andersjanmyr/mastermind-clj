@@ -72,16 +72,16 @@
 (defn rows [[a b c d]]
   (conde
     [(membero a symbols)
-    (membero b symbols)
-    (membero c symbols)
-    (membero d symbols)]))
+     (membero b symbols)
+     (membero c symbols)
+     (membero d symbols)]))
 
 (defn constraints-one [vars row score]
   (conde
     [(constraint vars row score 0)
-      (constraint vars row score 1)
-      (constraint vars row score 2)
-      (constraint vars row score 3)]))
+     (constraint vars row score 1)
+     (constraint vars row score 2)
+     (constraint vars row score 3)]))
 
 (defn combos [list]
   (vec (permutations list)))

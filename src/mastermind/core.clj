@@ -69,12 +69,12 @@
     :white (white-constraint vars row pos)
     :nada (== 1 2))) ; TODO :nada needs to be removed
 
-(defn rows [vars]
+(defn rows [[a b c d]]
   (conde
-    [(membero (vars 0) symbols)
-    (membero (vars 1) symbols)
-    (membero (vars 2) symbols)
-    (membero (vars 3) symbols)]))
+    [(membero a symbols)
+    (membero b symbols)
+    (membero c symbols)
+    (membero d symbols)]))
 
 (defn constraints-one [vars row score]
   (conde

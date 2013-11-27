@@ -13,12 +13,12 @@
                  [midje "1.5.1"]
                  [org.clojure/core.logic "0.8.5"]
                  [org.clojure/math.combinatorics "0.0.7"]
-                 [compojure "1.1.1"]
-                 [ring/ring-jetty-adapter "1.1.0"]
-                 [ring/ring-devel "1.1.0"]
-                 [ring-basic-authentication "1.0.1"]
+                 [compojure "1.1.6"]
+                 [ring "1.2.1"]
+                 [ring-basic-authentication "1.0.3"]
                  [environ "0.4.0"]
                  [com.cemerick/drawbridge "0.0.6"]
                  ]
-  :min-lein-version "2.0.0")
+  :min-lein-version "2.0.0"
+  :jvm-opts ["-Xmx1g"])
 
